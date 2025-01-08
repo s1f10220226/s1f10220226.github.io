@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>栄養素アドバイス</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="simple-design">
+        <h1>栄養素アドバイス</h1>
+        <input type="text" id="foodInput" placeholder="食べた料理を入力してください...">
+        <button id="analyzeButton">解析する</button>
+        <div id="result"></div>
+        <p><a href="/health">健康管理ページに移動</a></p>
+        <p><a href="{{ url_for('home') }}">ホームに戻る</a></p>
+    </div>
+    <script>
+        document.getElementById("analyzeButton").addEventListener("click", async () => {
+            const foodInput = document.getElementById("foodInput").value;
+            const response = await fetch("/analyze", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ food_input: foodInput })
+            });
+            const data = await response.json();
+            document.getElementById("result").innerText = data.result;
+        });
+    </script>
+</body>
+</html>
